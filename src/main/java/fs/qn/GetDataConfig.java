@@ -10,8 +10,6 @@ public class GetDataConfig {
 	public static final String dbUrl = getBundleValue(bundle, "dbUrl");
 	public static final String dbUser = getBundleValue(bundle, "dbUser");
 	public static final String dbPass = getBundleValue(bundle, "dbPass");
-	public static final String dbName = getBundleValue(bundle, "dbName");
-	public static final String savePath = getBundleValue(bundle, "savePath");
 	public static final String sqlPath = getBundleValue(bundle, "sqlPath");
 
 	/**

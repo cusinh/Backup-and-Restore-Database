@@ -6,13 +6,13 @@ import java.util.Calendar;
 
 public class BackupTable {
 
-	public static boolean Backupdbtosql(String dbTable) {
+	public static boolean Backupdbtosql(String dbName, String dbTable, String savePath) {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date1 = simpleDateFormat.format(cal.getTime());
 		String name = "\\" + date1.replace(":", ".").replace(" ", "_") + ".sql";
 		String executeCmd = GetDataConfig.sqlPath + "mysqldump -u " + GetDataConfig.dbUser + " -p" + GetDataConfig.dbPass
-				+ " --database " + GetDataConfig.dbName + " --table " + dbTable + " -r " + GetDataConfig.savePath + name;
+				+ " --database " + dbName + " --table " + dbTable + " -r " + savePath + name;
 		System.out.println("About to execute " + executeCmd);
 		try {
 			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
