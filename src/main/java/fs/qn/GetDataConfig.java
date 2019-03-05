@@ -11,6 +11,7 @@ public class GetDataConfig {
 	public static final String dbUser = getBundleValue(bundle, "dbUser");
 	public static final String dbPass = getBundleValue(bundle, "dbPass");
 	public static final String sqlPath = getBundleValue(bundle, "sqlPath");
+	public static final String sqlPathPostgre = getBundleValue(bundle, "sqlPathPostgre");
 
 	/**
 	 * Get value of key in resource file.
