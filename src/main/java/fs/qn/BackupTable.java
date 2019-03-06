@@ -76,17 +76,16 @@ public class BackupTable {
 			namedt = namedt.concat(string + " ");
 		}
 		scanner.close();
-		backupDBtoMySql(dbName, namedt,savePath);
+		backupDBtoMySql(dbName, namedt, savePath);
 	}
 
-	public static void main(String[] args) {
-		backupListTable("ems", "C:\\Users\\Vinh\\Desktop\\TT");
-	}
-	
-	public static boolean backupDBtoPostgreSql(String dbName, String dbTable, String savePath) {
+	public static boolean backupDBtoPostgreSql(String savePath, String dbTable, String dbName) {
 		String name = "\\" + getNameFile_VersionAndDate(savePath) + ".sql";
-		String executeCmd = GetDataConfig.sqlPathPostgre + "mysqldump -u " + GetDataConfig.dbUser + " -p"
-				+ GetDataConfig.dbPass + " --database " + dbName + " --table " + dbTable + " -r " + savePath + name;
+//		String executeCmd = GetDataConfig.sqlPathPostgre + "pg_dump.exe --file " + savePath + " --host "
+//				+ GetDataConfig.dbPHost + " --port " + GetDataConfig.dbPPost + " --username " + GetDataConfig.dbUserP
+//				+ " --password" + " --verbose " + "--format=c" + " --blobs" + " --table" + dbTable + dbName;
+		String executeCmd = GetDataConfig.sqlPathPostgre + "pg_dump.exe" + " -h " + GetDataConfig.dbHostP + " -U " + GetDataConfig.dbUserP
+				+ " --password=" + GetDataConfig.dbPassP + " -d " + dbName + " -t " + dbTable + " -F c -b -v -f " + savePath + name;
 		System.out.println("About to execute " + executeCmd);
 		try {
 			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
@@ -95,7 +94,7 @@ public class BackupTable {
 			int ch;
 			while ((ch = is.read()) != -1) {
 				System.out.write(ch);
-
+				System.out.println("Backup complete !!!");
 			}
 			InputStream err = runtimeProcess.getErrorStream();
 			while ((ch = err.read()) != -1) {
@@ -106,5 +105,10 @@ public class BackupTable {
 			exc.printStackTrace();
 		}
 		return false;
+	}
+
+	public static void main(String[] args) {
+//		backupListTable("ems", "D:\\backupPost");
+		backupDBtoPostgreSql("C:\\Users\\Vinh\\Desktop\\TT", "location", "test");
 	}
 }
