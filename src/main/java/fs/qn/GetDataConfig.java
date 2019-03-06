@@ -18,6 +18,7 @@ public class GetDataConfig {
 	public static final String dbNameSV = getBundleValue(bundle, "dbNameSV");
 	public static final String PathSV = getBundleValue(bundle, "PathSV");
 	public static final String dbMyServer = getBundleValue(bundle, "dbMyServer");
+	public static final String savePathSV = getBundleValue(bundle, "savePathSV");
 
 	/**
 	 * Get value of key in resource file.

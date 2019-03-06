@@ -6,8 +6,9 @@ import java.util.Timer;
 
 public class ScheduleBackup {
 
-	public static Boolean createTimeBackup(int year, int month, int day, int hour, int minute, int dateEnd) {
-		ScheduleTask task = new ScheduleTask();
+	public static Boolean createTimeBackup(int year, int month, int day, int hour, int minute, int dateEnd,
+			String taskName, String dbName, DatabaseType databaseType) {
+		ScheduleTask task = new ScheduleTask(taskName, dbName, databaseType);
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.YEAR, year);
 		calendar.set(Calendar.MONTH, month - 1);
