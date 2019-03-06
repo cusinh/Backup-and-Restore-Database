@@ -1,39 +1,37 @@
 package fs.qn;
 
 import java.io.File;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Scanner;
 
 public class BackupTable {
 	static List<String> dbTable = new ArrayList<String>();
 
-	public static boolean backupDBtoMySql(String dbName, String dbTable, String savePath) {
+	public static boolean backupDBtoMySql(String dbName, List<String> listDBTable, String savePath) {
+		String nameTable1 = "";
+		for (String nameTable : listDBTable) {
+			nameTable1 = nameTable1.concat(nameTable + " ");
+		}
 		String name = "\\" + getNameFile_VersionAndDate(savePath) + ".sql";
 		String executeCmd = GetDataConfig.sqlPath + "mysqldump -u " + GetDataConfig.dbUser + " -p"
-				+ GetDataConfig.dbPass + " --database " + dbName + " --table " + dbTable + " -r " + savePath + name;
+				+ GetDataConfig.dbPass + " --database " + dbName + " --table " + nameTable1 + " -r " + savePath + name;
 		System.out.println("About to execute " + executeCmd);
 		try {
 			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
-
-			InputStream is = runtimeProcess.getInputStream();
-			int ch;
-			while ((ch = is.read()) != -1) {
-				System.out.write(ch);
-
+			int processComplete = runtimeProcess.waitFor();
+			if(processComplete == 0) {
+				System.out.println("Complete !!!");
+				return true;
+			}else {
+				System.out.println("Failure !!!");
+				return false;
 			}
-			InputStream err = runtimeProcess.getErrorStream();
-			while ((ch = err.read()) != -1) {
-				System.out.write(ch);
-			}
-			return true;
 		} catch (Exception exc) {
 			exc.printStackTrace();
+			return false;
 		}
-		return false;
 	}
 
 	public static String getNameFile_VersionAndDate(String savePath) {
@@ -61,54 +59,64 @@ public class BackupTable {
 		return nameFile + date1.replace(":", ".").replace(" ", "_");
 	}
 
-	public static void backupListTable(String dbName, String savePath) {
-		String namedt = "";
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Input number of table name: ");
-		int numberTable = scanner.nextInt();
-		scanner.nextLine();
-		for (int i = 0; i < numberTable; i++) {
-			System.out.format("Input table name %d: ", i);
-			String name = scanner.nextLine();
-			dbTable.add(name);
-		}
-		for (String string : dbTable) {
-			namedt = namedt.concat(string + " ");
-		}
-		scanner.close();
-		backupDBtoMySql(dbName, namedt, savePath);
-	}
+//	public static boolean backupDBtoPostgreSql(String savePath, String dbTable, String dbName) {
+//		String name = "\\" + getNameFile_VersionAndDate(savePath) + ".sql";
+//		String executeCmd = GetDataConfig.sqlPathPostgre + "pg_dump.exe" + " -h " + GetDataConfig.dbHostP + " -U "
+//				+ GetDataConfig.dbUserP + " --password=" + GetDataConfig.dbPassP + " -d " + dbName + " -t " + dbTable
+//				+ " -F c -b -v -f " + savePath + name;
+//		System.out.println("About to execute " + executeCmd);
+//		try {
+//			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+//
+//			InputStream is = runtimeProcess.getInputStream();
+//			int ch;
+//			while ((ch = is.read()) != -1) {
+//				System.out.write(ch);
+//				System.out.println("Backup complete !!!");
+//			}
+//			InputStream err = runtimeProcess.getErrorStream();
+//			while ((ch = err.read()) != -1) {
+//				System.out.write(ch);
+//			}
+//			return true;
+//		} catch (Exception exc) {
+//			exc.printStackTrace();
+//		}
+//		return false;
+//	}
 
-	public static boolean backupDBtoPostgreSql(String savePath, String dbTable, String dbName) {
-		String name = "\\" + getNameFile_VersionAndDate(savePath) + ".sql";
-//		String executeCmd = GetDataConfig.sqlPathPostgre + "pg_dump.exe --file " + savePath + " --host "
-//				+ GetDataConfig.dbPHost + " --port " + GetDataConfig.dbPPost + " --username " + GetDataConfig.dbUserP
-//				+ " --password" + " --verbose " + "--format=c" + " --blobs" + " --table" + dbTable + dbName;
-		String executeCmd = GetDataConfig.sqlPathPostgre + "pg_dump.exe" + " -h " + GetDataConfig.dbHostP + " -U " + GetDataConfig.dbUserP
-				+ " --password=" + GetDataConfig.dbPassP + " -d " + dbName + " -t " + dbTable + " -F c -b -v -f " + savePath + name;
-		System.out.println("About to execute " + executeCmd);
-		try {
-			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
-
-			InputStream is = runtimeProcess.getInputStream();
-			int ch;
-			while ((ch = is.read()) != -1) {
-				System.out.write(ch);
-				System.out.println("Backup complete !!!");
-			}
-			InputStream err = runtimeProcess.getErrorStream();
-			while ((ch = err.read()) != -1) {
-				System.out.write(ch);
-			}
-			return true;
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		return false;
-	}
+//	public static boolean backupDBtoOrecal(String savePath, String dbTable, String dbName) {
+//		String name = "\\" + getNameFile_VersionAndDate(savePath) + ".sql";
+//		String executeCmd = GetDataConfig.sqlPathPostgre + "pg_dump.exe" + " -h " + GetDataConfig.dbHostP + " -U "
+//				+ GetDataConfig.dbUserP + " --password=" + GetDataConfig.dbPassP + " -d " + dbName + " -t " + dbTable
+//				+ " -F c -b -v -f " + savePath + name;
+//		System.out.println("About to execute " + executeCmd);
+//		try {
+//			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
+//
+//			InputStream is = runtimeProcess.getInputStream();
+//			int ch;
+//			while ((ch = is.read()) != -1) {
+//				System.out.write(ch);
+//				System.out.println("Backup complete !!!");
+//			}
+//			InputStream err = runtimeProcess.getErrorStream();
+//			while ((ch = err.read()) != -1) {
+//				System.out.write(ch);
+//			}
+//			return true;
+//		} catch (Exception exc) {
+//			exc.printStackTrace();
+//		}
+//		return false;
+//	}
 
 	public static void main(String[] args) {
-//		backupListTable("ems", "D:\\backupPost");
-		backupDBtoPostgreSql("C:\\Users\\Vinh\\Desktop\\TT", "location", "test");
+		List<String> listDBTable = new ArrayList<String>();
+		listDBTable.add("skill");
+		listDBTable.add("employee");
+//		listDBTable.add("");
+		backupDBtoMySql("ems", listDBTable, "C:\\Users\\Vinh\\Desktop\\TT");
+//		backupDBtoPostgreSql("C:\\Users\\Vinh\\Desktop\\TT", "location", "test");
 	}
 }
