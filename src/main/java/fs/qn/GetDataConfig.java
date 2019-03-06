@@ -13,6 +13,7 @@ public class GetDataConfig {
 	public static final String dbName = getBundleValue(bundle, "dbName");
 	public static final String sqlPath = getBundleValue(bundle, "sqlPath");
 	public static final String savePath = getBundleValue(bundle, "savePath");
+	public static final String tbName = getBundleValue(bundle, "tbName");
 	
 	public static final String dbNameSV = getBundleValue(bundle, "dbNameSV");
 	public static final String PathSV = getBundleValue(bundle, "PathSV");

@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.sql.SQLException;
 
 public class RestoreDatabase {
-	public boolean restoreDBMySQL(String dbName) {
+	public static boolean restoreDBMySQL(String dbName) {
 		try {
 			DBConfig.createDB(dbName);
 
@@ -33,12 +33,11 @@ public class RestoreDatabase {
 		}
 
 	}
-	public boolean restoreDBSQLServer() {
+
+	public static boolean restoreDBSQLServer() {
 		try {
-//			DBConfig.createDB(dbName);
-//			String executeCmd ="SQLCMD -E -S "  + GetDataConfig.dbMyServer + " –Q /"RESTORE DATABASE "
-//					+ GetDataConfig.dbNameSV + " FROM DISK=" + "'" + GetDataConfig.PathSV + "'” ";
-			String executeCmd ="SQLCMD -S " + GetDataConfig.dbMyServer + " -Q \"restore database " + GetDataConfig.dbNameSV + " from disk='" + GetDataConfig.PathSV + "' with stats=10\"";
+			String executeCmd = "SQLCMD -E -S " + GetDataConfig.dbMyServer + " -Q \"restore database "
+					+ GetDataConfig.dbNameSV + " from disk='" + GetDataConfig.PathSV + "' with stats=10\"";
 			System.out.println(executeCmd);
 			ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", executeCmd);
 			builder.redirectErrorStream(true);
