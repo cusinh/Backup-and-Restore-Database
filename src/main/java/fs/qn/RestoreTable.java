@@ -1,35 +1,28 @@
 package fs.qn;
 
-import java.awt.HeadlessException;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public class RestoreTable {
-	public static boolean restoreTableFromSQL(String tbName) {
-		try {
-
-			String executeCmd = "mysql -u " + GetDataConfig.dbUser + " -p" + GetDataConfig.dbPass 
-					+ " --database " + GetDataConfig.dbName + " --table " + tbName
-					+ " -s" + " < " + GetDataConfig.savePath;
-			// System.out.println("About to execute " + executeCmd);.
-
-			Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
-			Scanner stdin = new Scanner(runtimeProcess.getInputStream());
-			while (stdin.hasNextLine()) {
-				stdin.nextLine();
+	public boolean Restore(String tbName) throws IOException, InterruptedException, SQLException {
+		String executeCmd = "mysql -u" + GetDataConfig.dbUser + " -p" + GetDataConfig.dbPass + " --database " + GetDataConfig.dbName 
+				+ " --table " + tbName + " -s < " + GetDataConfig.savePath; 
+		System.out.println(executeCmd);
+		ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", executeCmd);
+		builder.redirectErrorStream(true);
+		Process p = builder.start();
+		BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		String line;
+		while (true) {
+			line = r.readLine();
+			if (line == null) {
+				break;
 			}
-			stdin.close();
-			int processComplete = runtimeProcess.waitFor();
-
-			if (processComplete == 1) {
-				return true;
-			} else {
-				return false;
-			}
-
-		} catch (IOException | InterruptedException | HeadlessException ex) {
-			return false;
+			System.out.println(line);
 		}
-
+		return true;
 	}
+	
 }
